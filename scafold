@@ -1,0 +1,26 @@
+project-root/
+│
+├── server.js
+│
+├── models/
+│   ├── user.js
+│   ├── product.js
+│   └── order.js
+│
+├── routes/
+│   ├── authRoutes.js
+│   ├── productRoutes.js
+│   └── orderRoutes.js
+│
+└── config/
+    ├── dbConfig.js
+    ├── stripeConfig.js
+    └── cloudinaryConfig.js
+
+server.js: This is the main entry point of your application where the server is created, routes are initialized, middleware is set up, and the server is started.
+
+models/: This folder contains all the Mongoose models for your application. Each model file (user.js, product.js, order.js) defines the schema for a specific entity in your database (e.g., User, Product, Order).
+
+routes/: This folder contains route files for different entities in your application. Each route file (authRoutes.js, productRoutes.js, orderRoutes.js) defines the RESTful API endpoints and connects them to corresponding functions directly without using a separate controller folder.
+
+config/: This folder contains configuration files for various services used in your application (e.g., database configuration, Stripe configuration, Cloudinary configuration).
