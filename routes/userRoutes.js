@@ -61,7 +61,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.use(authenticate);
+// router.use(authenticate);
 // GET /api/users/profile - Get user profile with previous orders
 router.get('/profile', async (req, res) => {
     try {
@@ -76,7 +76,7 @@ router.get('/profile', async (req, res) => {
 });
 
 // PUT /api/users/profile - Update user profile
-router.put('/profile', async (req, res) => {
+router.put('/profile',  async (req, res) => {
     try {
         // Extract updated user details from request body
         const { username, email } = req.body;

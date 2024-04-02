@@ -6,7 +6,7 @@ const authenticate = require('../middlewares/authMiddleware');
 const authorize = require('../middlewares/authorizeMiddleware');
 
 // Middleware usage
-router.use(authenticate);
+// router.use(authenticate);
 
 // Route: POST /api/orders
 // Description: Create a new order
@@ -55,9 +55,10 @@ router.get('/myorders', async (req, res) => {
     }
 });
 
+// router.use(authorize);
 // Route: PUT /api/orders/:id/shipped
 // Description: Mark order as shipped by admin
-router.put('/:id/shipped', authorize, async (req, res) => {
+router.put('/:id/shipped', async (req, res) => {
     try {
         const order = await Order.findById(req.params.id);
         if (!order) {
@@ -74,7 +75,7 @@ router.put('/:id/shipped', authorize, async (req, res) => {
 
 // Route: PUT /api/orders/:id/delivered
 // Description: Mark order as delivered by admin
-router.put('/:id/delivered', authorize, async (req, res) => {
+router.put('/:id/delivered', async (req, res) => {
     try {
         const order = await Order.findById(req.params.id);
         if (!order) {
@@ -91,7 +92,7 @@ router.put('/:id/delivered', authorize, async (req, res) => {
 
 // Route: DELETE /api/orders/:id
 // Description: Delete an order by admin
-router.delete('/:id', authorize, async (req, res) => {
+router.delete('/:id',   async (req, res) => {
     try {
         const order = await Order.findById(req.params.id);
         if (!order) {

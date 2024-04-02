@@ -1,3 +1,4 @@
+// product.js
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
@@ -16,9 +17,9 @@ const productSchema = new mongoose.Schema({
   categories: [{
     type: String
   }],
-  imageUrl: {
+  imageUrls: [{  // Change to array to store multiple image URLs
     type: String
-  },
+  }],
   isFeatured: {
     type: Boolean,
     default: false
