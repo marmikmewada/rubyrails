@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Payment Route</title>
+    <!-- Include Stripe.js with your publishable key -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        // Set your publishable key
+        var stripe = Stripe('pk_test_51OvPKcSE377gr7sTcJs5c2CcxhLZWlFN1KNfcEKEZS8FzEudJqAISmOK7An0rmuC9tCqK3KTHdDCoSzcoAuRzweb009v4tOvBb');
+    </script>
+</head>
+<body>
+    <h1>Test Payment Route</h1>
+    <!-- Add a checkout button -->
+    <button id="checkout-button">Checkout</button>
+
+    <div id="card-details" style="display: none;">
+        <input id="card-holder-name" type="text" placeholder="Card Holder Name">
+        <div id="card-element"></div>
+        <button id="pay-button">Pay Now</button>
+    </div>
+
+    <script>
+        document.getElementById('checkout-button').addEventListener('click', async () => {
+            // Show card details form
+            document.getElementById('card-details').style.display = 'block';
+        });
+
+        // Create a Stripe client
+        var elements = stripe.elements();
+
+        // Create an instance of the card Element
+        var card = elements.create('card');
+
+        // Add an instance of the card Element into the `card-element` div
+        card.mount('#card-element');
+
+        // Handle form submission
+        document.getElementById('pay-button').addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            const cardHolderName = document.getElementById('card-holder-name').value;
+
+            const { paymentMethod, error } = await stripe.createPaymentMethod({
+                type: 'card',
+                card: card,
+                billing_details: {
+                    name: cardHolderName
+                }
+            });
+
+            if (error) {
+                console.error('Error creating payment method:', error);
+            } else {
+                try {
+                    // Send payment method ID to server to confirm the payment
+                    const requestBody = {
+                        productId: "660bc9d956b57fe72b22be18",
+                        paymentMethod: paymentMethod.id,
+                        returnUrl: "https://youtube.com" // Replace with your actual return URL
+                    };
+
+                    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjBhYjgzYWI2YjI2ODkyY2ZlNmM0NzUiLCJlbWFpbCI6Im1ld2FkYW1hcm1pa0BnbWFpbC5jb20iLCJpYXQiOjE3MTIyNjcwNDF9.7d2Ayxno7JiEQo-1dCJVB2qrFxjHUu7QAw0kJVBhRt0"; // Replace with your actual token
+
+                    const response = await fetch('http://localhost:5000/api/orders', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}` // Include the token in the request headers
+                        },
+                        body: JSON.stringify(requestBody)
+                    });
+
+                    const responseData = await response.json();
+
+                    if (response.ok) {
+                        console.log('Payment successful:', responseData);
+                        // Redirect user to success page
+                        window.location.href = responseData.returnUrl;
+                    } else {
+                        console.error('Payment failed:', responseData.message);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

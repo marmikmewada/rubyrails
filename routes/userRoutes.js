@@ -61,7 +61,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// router.use(authenticate);
+router.use(authenticate);
 // GET /api/users/profile - Get user profile with previous orders
 router.get('/profile', async (req, res) => {
     try {

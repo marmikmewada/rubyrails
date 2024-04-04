@@ -3,8 +3,8 @@ const router = express.Router();
 const multer = require('multer');
 const { Storage } = require('@google-cloud/storage');
 const Product = require('../models/Product');
-const authenticate = require('../middlewares/authMiddleware');
-const authorize = require('../middlewares/authorizeMiddleware');
+const authenticate = require('../middlewares/authMiddleware.js');
+const authorize = require('../middlewares/authorizeMiddleware.js');
 
 // Configure multer for file upload
 const storage = multer.memoryStorage(); // Use memory storage for handling file uploads
@@ -24,7 +24,7 @@ const bucketName = 'test-todo-d8179.appspot.com'; // Your Firebase Storage bucke
 const bucket = storageClient.bucket(bucketName);
 
 // Middleware usage
-// router.use(authenticate);
+router.use(authenticate);
 
 // Route: GET /api/products
 // Description: Get all products
@@ -59,7 +59,7 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
-// router.use(authorize);
+router.use(authorize);
 // Route: POST /api/products
 // Description: Create a new product
 router.post('/', upload.array('images', 5), async (req, res) => {
@@ -194,3 +194,4 @@ router.delete('/:id',  async (req, res) => {
     }
 });
 
+module.exports = router
